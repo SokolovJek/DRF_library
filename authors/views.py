@@ -1,3 +1,9 @@
 from django.shortcuts import render
+from .models import Author
+from .serializers import AuthorsModelSerializers
+from rest_framework.viewsets import ModelViewSet
 
-# Create your views here.
+
+class AuthorModelViewSet(ModelViewSet):
+    queryset = Author.objects.all()
+    serializer_class = AuthorsModelSerializers
