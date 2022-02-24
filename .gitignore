@@ -1,0 +1,7 @@
+.idea/
+__pycache__
+db.sqlite3
+.DS_Store
+media
+static
+password.txt
