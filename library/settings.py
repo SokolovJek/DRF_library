@@ -39,6 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'authors',
     'rest_framework',
+
+    'corsheaders',  # for REACT CORS
+
 ]
 
 MIDDLEWARE = [
@@ -49,7 +52,13 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    'corsheaders.middleware.CorsMiddleware',        # for REACT CORS
+    'django.middleware.common.CommonMiddleware',    # for REACT CORS
 ]
+
+CORS_ALLOWED_ORIGINS = ["http://127.0.0.1:3000"]  # for REACT CORS
+
 
 ROOT_URLCONF = 'library.urls'
 
