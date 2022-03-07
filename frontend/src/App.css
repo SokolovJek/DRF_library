@@ -1,39 +1,30 @@
-td,th{
-    border: 1px solid #000;
+:root{
+  --color1:#05b1b1;
+  --color2:#52339a;
 }
 
-table{
-    display: inline-block;
+.herader, .footer, .section{
+  padding: 100px 0;
 }
-.App {
-  text-align: center;
-}
-
-.Table{
-    border: 1px solid #000;
-    border-collapse: collapse
-}
-
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.header, .footer{
+  background: var(--color1);
+  background: -moz-linear-gradient(left, var(--color1) 0%, var(--color2) 100%);
+  background: -webkit-linear-gradient(left, var(--color1) 0%,var(--color2) 100%);
+  background: linear-gradient(to right, var(--color1) 0%,var(--color2) 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=var(--color1), endColorstr=var(--color2),GradientType=1 );
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.itd_play{
+  background-color: var(--color1);
+  border-radius: 10%;
+  
   display: flex;
-  flex-direction: column;
-  align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  align-items: center;
+  cursor: pointer;
+  margin: 30px auto;
+  transition: all 0.2s ease;
 }
-
-.App-link {
-  color: #61dafb;
+.itd_play:hover{
+  background-color: var(--color2);
 }
-
-
