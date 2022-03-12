@@ -10,7 +10,6 @@ class ProjectModel(models.Model):
     link_git = models.URLField()
     descriptions = models.TextField()
     date_create = models.DateTimeField(auto_now_add=True)
-    todo_set = models.ManyToManyField('TodoModel')
 
     def __str__(self):
         return f'проэкт - {self.project_name}'
