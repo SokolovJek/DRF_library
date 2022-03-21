@@ -1,8 +1,17 @@
-from rest_framework.serializers import HyperlinkedModelSerializer
+from rest_framework.serializers import HyperlinkedModelSerializer, ModelSerializer
+
 from .models import Author
 
+#
+# class AuthorsModelSerializers(HyperlinkedModelSerializer):
+#     class Meta:
+#         model = Author
+#         fields = '__all__'
 
-class AuthorsModelSerializers(HyperlinkedModelSerializer):
+
+
+
+class AuthorsModelSerializers(ModelSerializer):
     class Meta:
         model = Author
         fields = '__all__'

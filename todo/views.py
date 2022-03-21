@@ -19,14 +19,14 @@ class MyPaginatorTodoView(LimitOffsetPagination):
 class ProjectView(ModelViewSet):
     queryset = ProjectModel.objects.all()
     serializer_class = ProjectModelSerializers
-    pagination_class = MyPaginator
+    # pagination_class = MyPaginator
     filterset_class = ProjectFilter
 
 
 class TodoView(UpdateModelMixin, CreateModelMixin, RetrieveModelMixin, DestroyModelMixin, ListModelMixin, GenericViewSet):
     queryset = TodoModel.objects.all()
     serializer_class = TodoModelSerializers
-    pagination_class = MyPaginatorTodoView
+    # pagination_class = MyPaginatorTodoView
     filterset_class = TodoFilter
 
     def destroy(self, request, *args, **kwargs):
