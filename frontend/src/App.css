@@ -28,3 +28,16 @@
 .itd_play:hover{
   background-color: var(--color2);
 }
+
+
+/* таблица */
+table {
+   border: 2px solid grey;
+}
+th {
+   border: 2px solid grey;
+}
+
+td {
+   border: 2px solid grey;
+}

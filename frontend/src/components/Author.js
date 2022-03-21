@@ -23,7 +23,7 @@ const AuthorItem = ({author}) => {
 
 const AuthorList = ({authors}) => {
     return(
-        <table className='Table'>
+        <table className='table'>
             <tbody>
                 <tr>
                     <th>
