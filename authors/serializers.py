@@ -15,3 +15,4 @@ class AuthorsModelSerializers(ModelSerializer):
     class Meta:
         model = Author
         fields = '__all__'
+        # exclude = ('uid',)

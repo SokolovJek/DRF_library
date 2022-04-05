@@ -4,7 +4,7 @@ from .models import ProjectModel, TodoModel
 
 class ProjectModelSerializers(serializers.ModelSerializer):
     set_todo = serializers.SerializerMethodField()
-    users = serializers.StringRelatedField(many=True)
+    # users = serializers.StringRelatedField(many=True)
 
     class Meta:
         model = ProjectModel
@@ -18,8 +18,8 @@ class ProjectModelSerializers(serializers.ModelSerializer):
 
 
 class TodoModelSerializers(serializers.ModelSerializer):
-    project = serializers.StringRelatedField()
-    users = serializers.StringRelatedField()
+    # project = serializers.StringRelatedField()
+    # users = serializers.StringRelatedField()
 
     class Meta:
         model = TodoModel
