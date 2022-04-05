@@ -6,6 +6,8 @@ from rest_framework.pagination import LimitOffsetPagination
 from .filter import ProjectFilter, TodoFilter
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.permissions import BasePermission
+from rest_framework.permissions import IsAuthenticated, AllowAny
 
 
 class MyPaginator(LimitOffsetPagination):
@@ -16,7 +18,14 @@ class MyPaginatorTodoView(LimitOffsetPagination):
     default_limit = 20
 
 
+class StaffOnly(BasePermission):
+    """Здесь правами будут наделены пользователи-сотрудники (is_staff)."""
+    def has_permission(self, request, view):
+        return request.user.is_staff
+
+
 class ProjectView(ModelViewSet):
+    # permission_classes = [IsAuthenticated]
     queryset = ProjectModel.objects.all()
     serializer_class = ProjectModelSerializers
     # pagination_class = MyPaginator
@@ -37,5 +46,3 @@ class TodoView(UpdateModelMixin, CreateModelMixin, RetrieveModelMixin, DestroyMo
         instance.save()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-    # def perform_destroy(self, instance):
-    #     instance.delete()
