@@ -25,7 +25,7 @@ class StaffOnly(BasePermission):
 
 
 class ProjectView(ModelViewSet):
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
     queryset = ProjectModel.objects.all()
     serializer_class = ProjectModelSerializers
     # pagination_class = MyPaginator
