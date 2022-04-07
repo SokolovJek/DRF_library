@@ -1,7 +1,7 @@
 import React from 'react'
 import {useParams} from 'react-router-dom'
 
-let a = 0
+
 const ProjectTodo = ({project}) => {
 	return (
 		<tr>
@@ -29,10 +29,9 @@ const ProjectTodo = ({project}) => {
 
 
 const ProjectsTodo = ({projects}) => {
-
-    let {uid} = useParams()         // можно так
-    let mu_uid = useParams().uid    // но так наглядней
-    let filter_project = projects.filter((project) => project.uid === uid)
+    let {id} = useParams()         // можно так
+//    let my_id = useParams().id    // но так наглядней
+    let filter_project = projects.filter((project) => project.id == id)
     return(
         <table className='Table'>
             <tbody>

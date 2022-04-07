@@ -6,7 +6,7 @@ const ProjectItem = ({project}) => {
 	return (
 		<tr>
 			<td>
-				<NavLink to={`project/${project.uid}`}> {project.project_name} </NavLink>
+				<NavLink to={`project/${project.id}`}> {project.project_name} </NavLink>
 			</td>
 			<td>
 				{project.users.map((user) => user + ', ')}
