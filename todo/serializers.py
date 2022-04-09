@@ -4,7 +4,7 @@ from .models import ProjectModel, TodoModel
 
 class ProjectModelSerializers(serializers.ModelSerializer):
     set_todo = serializers.SerializerMethodField()
-    # users = serializers.StringRelatedField(many=True)
+    users = serializers.StringRelatedField(many=True)
 
     class Meta:
         model = ProjectModel
@@ -15,6 +15,12 @@ class ProjectModelSerializers(serializers.ModelSerializer):
         for i in TodoModel.objects.filter(project=obj.pk):
            a.append(str(i))
         return a
+
+
+class ProjectModelSerializersPost(serializers.ModelSerializer):
+    class Meta:
+        model = ProjectModel
+        fields = '__all__'
 
 
 class TodoModelSerializers(serializers.ModelSerializer):

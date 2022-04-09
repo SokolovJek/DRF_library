@@ -1,5 +1,5 @@
 from .models import ProjectModel, TodoModel
-from .serializers import ProjectModelSerializers, TodoModelSerializers
+from .serializers import ProjectModelSerializers, ProjectModelSerializersPost, TodoModelSerializers
 from rest_framework.viewsets import ModelViewSet, GenericViewSet
 from rest_framework.mixins import UpdateModelMixin, RetrieveModelMixin, ListModelMixin, DestroyModelMixin, CreateModelMixin
 from rest_framework.pagination import LimitOffsetPagination
@@ -30,6 +30,12 @@ class ProjectView(ModelViewSet):
     serializer_class = ProjectModelSerializers
     # pagination_class = MyPaginator
     filterset_class = ProjectFilter
+
+    def get_serializer_class(self):
+        if self.request.method in ['GET']:
+            return ProjectModelSerializers
+        else:
+            return ProjectModelSerializersPost
 
 
 class TodoView(UpdateModelMixin, CreateModelMixin, RetrieveModelMixin, DestroyModelMixin, ListModelMixin, GenericViewSet):
