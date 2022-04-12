@@ -25,7 +25,7 @@ class App extends React.Component {
 	constructor(props) {
 		super(props)
 		this.state = {
-			'authors': [],
+			'users': [],
 			'projects': [],
 			'todos': [],
 			'token': '',
@@ -76,14 +76,14 @@ class App extends React.Component {
     load_data(){
         const headers = this.get_headers()
 
-        axios.get('http://127.0.0.1:8000/api/author/', {headers})
+        axios.get('http://127.0.0.1:8000/api/users/', {headers})
 			.then(response => {
-				const authors = response.data
+				const users = response.data
 				this.setState(
-					{ 'authors': authors }
+					{ 'users': users }
 				)
 			}).catch(error => {console.log('--my--error-' + error)
-			                   this.setState({authors: []})
+			                   this.setState({users: []})
 			 })
 
 
@@ -146,18 +146,18 @@ class App extends React.Component {
                             <h1 className='text-center text-white'>
                                 Всz информация
                             </h1>
-                            <a href='http://127.0.0.1:8000/api/author/' className='btn itd_play text-uppercase'>Перейти</a>
+                            <a href='http://127.0.0.1:8000/api/users/' className='btn itd_play text-uppercase'>Перейти</a>
                         </div>
 
                     </div>
                     <Switch>
-                        <Route exact path='/' component={() => <AuthorList authors={this.state.authors} /> } />
+                        <Route exact path='/' component={() => <AuthorList users={this.state.users} /> } />
                         <Route exact path='/projects' component={() => <ProjectsList projects={this.state.projects} /> } />
                         <Route exact path='/todos' component={() => <TodosList todos={this.state.todos} /> } />
                         <Route path='/project/:id' component={() => <ProjectsTodo projects={this.state.projects}/> } />
                         <Route exact path='/login' component={() => <LoginForm get_token={(username,
                             password) => this.get_token(username, password)} /> } />
-                        <Redirect from='/authors' to='/' />
+                        <Redirect from='/users' to='/' />
                         <Route component={page_not_found_404} />
 
                     </Switch>
