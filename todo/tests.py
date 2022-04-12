@@ -3,11 +3,11 @@ import json
 from rest_framework import status
 from rest_framework.test import APIRequestFactory, force_authenticate, APIClient, APISimpleTestCase, APITestCase
 from mixer.backend.django import mixer
-from django.contrib.auth.models import User
 from .models import TodoModel, ProjectModel
-from authors.models import Author
-from authors.views import AuthorModelViewSet
+from users.models import Users
+from users.views import UserModelViewSet
 from .views import ProjectView, TodoView
+from django.contrib.auth import get_user_model
 
 
 # APIRequestFactory «подменяет» объект запроса, который мы потом передаём во view.
@@ -42,17 +42,32 @@ from .views import ProjectView, TodoView
 # ● AuthorModelViewSet — view set для работы с моделью Author;
 # ● TodoModel, ProjectModel, Author — модели.
 
-user_model = Author.objects.first()
-project_model = ProjectModel.objects.first()
+# user_model = Users.objects.first()
+# project_model = ProjectModel.objects.first()
 
 
 class TestAuthorViewSet(TestCase):
+    def setUp(self):
+        self.user_data = {'first_name': 'Nic',
+                          'last_name': 'Sokolov',
+                          'birthday_year': 1991,
+                          'email': 'jeksok@maail.ru',
+                          'position': 'developer',
+                          'username': 'braun',
+                          'password': 'geekbrains'}
+        self.super_user = get_user_model().objects.create_superuser('admin', 'admin@com.com', 'admin12345')
+        self.user = Users.objects.create_user('jek', 'jek@com.com', 'geekbrains')
+        self.project = ProjectModel.objects.create(project_name='ForYou',
+                                                   link_git='https://github.com/',
+                                                   descriptions='ла')
+        self.project.users.add(self.user)
 
-    # APIRequestFactory
+        # APIRequestFactory
+
     def test_get_list_author(self):
         factory = APIRequestFactory()
-        request = factory.get('api/authors/')
-        view = AuthorModelViewSet.as_view({'get': 'list'})
+        request = factory.get('api/users/')
+        view = UserModelViewSet.as_view({'get': 'list'})
         response = view(request)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
@@ -66,27 +81,22 @@ class TestAuthorViewSet(TestCase):
     def test_get_list_project_authenticate_user(self):
         factory = APIRequestFactory()
         request = factory.get('api/projects/')
-        admin = User.objects.create_superuser('admin', 'admin@com.com', 'admin123456')
-        force_authenticate(request, admin)
+        force_authenticate(request, self.super_user)
         view = ProjectView.as_view({'get': 'list'})
         response = view(request)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_create_author(self):
         factory = APIRequestFactory()
-        request = factory.post('api/authors/', {'first_name': 'Djon',
-                                                'last_name': 'Puchin',
-                                                'birthday_year': '1991',
-                                                'email': 'puchin@mail.ru',
-                                                'position': 'developer'})
-        view = AuthorModelViewSet.as_view({'post': 'create'})
+        request = factory.post('api/authors/', self.user_data)
+        view = UserModelViewSet.as_view({'post': 'create'})
         response = view(request)
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_create_project(self):
         factory = APIRequestFactory()
         request = factory.post('api/project/', {'project_name': 'сайт для ВАС',
-                                                'users': user_model,
+                                                'users': self.user,
                                                 'link_git': 'git/mru.com',
                                                 'descriptions': '........'})
         view = ProjectView.as_view({'post': 'create'})
@@ -95,69 +105,39 @@ class TestAuthorViewSet(TestCase):
 
     def test_create_todo(self):
         factory = APIRequestFactory()
-        request = factory.post('api/project/', {'project': project_model,
-                                                'todo_descriptions': 'сделать верстку и макет',
-                                                'users': user_model})
+        request = factory.post('api/todo/', {'project': self.project,
+                                             'todo_descriptions': 'сделать верстку и макет',
+                                             'users': self.user})
         view = TodoView.as_view({'post': 'create'})
         response = view(request)
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_create_admin(self):
         factory = APIRequestFactory()
-        request = factory.post('api/author/', {'first_name': 'Djon',
-                                                'last_name': 'Puchin',
-                                                'birthday_year': '1991',
-                                                'email': 'puchin@mail.ru',
-                                                'position': 'developer'})
-        admin = User.objects.create_superuser('admin', 'admin@com.com', 'admin123456')
-        force_authenticate(request, admin)
-        view = AuthorModelViewSet.as_view({'post': 'create'})
+        request = factory.post('api/users/', self.user_data)
+        force_authenticate(request, self.super_user)
+        view = UserModelViewSet.as_view({'post': 'create'})
         response = view(request)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
-    # APIClient
+    # # APIClient
     def test_get_detail(self):
-        author = Author.objects.create(first_name='Djon',
-                                       last_name='Puchin',
-                                       birthday_year='1991',
-                                       email='puchjjin@mail.ru',
-                                       position='developer')
         client = APIClient()
-        response = client.get(f'/api/author/{author.id}/')
+        response = client.get(f'/api/users/{self.user.id}/')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_edit_author(self):
-        author = Author.objects.create(first_name='Djon',
-                                       last_name='Puchin',
-                                       birthday_year='1991',
-                                       email='puin@mail.ru',
-                                       position='developer')
         client = APIClient()
-        response = client.put(f'/api/author/{author.id}/', {'first_name': 'jek',
-                                                            'last_name': 'Pushilin',
-                                                            'birthday_year': '1991',
-                                                            'email': 'jek@mail.ru',
-                                                            'position': 'developer'})
+        response = client.put(f'/api/users/{self.user.id}/', self.user_data)
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_edit_author_and_authorize(self):
-        author = Author.objects.create(first_name='Djon',
-                                       last_name='Puchin',
-                                       birthday_year='1991',
-                                       email='puin@mail.ru',
-                                       position='developer')
         client = APIClient()
-        admin = User.objects.create_superuser('admin', 'admin@admin.com', 'admin123456')
-        client.login(username=admin, password='admin123456')
-        response = client.put(f'/api/author/{author.id}/', {'first_name': 'jek',
-                                                            'last_name': 'Pushilin',
-                                                            'birthday_year': '1991',
-                                                            'email': 'jek@mail.ru',
-                                                            'position': 'developer'})
+        client.login(username='admin', password='admin12345')
+        response = client.put(f'/api/users/{self.user.id}/', self.user_data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        author = Author.objects.get(id=author.id)
-        self.assertEqual(author.first_name, 'jek')
-        self.assertEqual(author.email, 'jek@mail.ru')
+        user = Users.objects.get(id=self.user.id)
+        self.assertEqual(user.first_name, 'Nic')
         client.logout()
 
     # APISimpleTestCase
@@ -167,49 +147,16 @@ class TestAuthorViewSet(TestCase):
         self.assertEqual(math.sqrt(4), 2)
 
     # APITestCase
-    def test_edit_project_for_admin(self):
-        admin = User.objects.create_superuser('admin', 'admin@admin.com', 'admin123456')
-        self.client.login(username='admin', password='admin123456')
+    def test_get_project_for_admin(self):
+        self.client.login(username='admin', password='admin12345')
         response = self.client.get(f'/api/projects/')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.client.logout()
 
     def test_edit_project_for_admin(self):
-
-        """TypeError: Direct assignment to the forward side of a many-to-many set is prohibited. Use users.set() instead."""
-
-        user = Author.objects.create(first_name='Djon',
-                                     last_name='Puchin',
-                                     birthday_year='1991',
-                                     email='puin@mail.ru',
-                                     position='developer')
-        project = ProjectModel.objects.create(project_name='сайт для ВАС',
-                                              users=user,
-                                              link_git='git/mru.com',
-                                              descriptions='........')
-
-        admin = User.objects.create_superuser('admin', 'admin@admin.com', 'admin123456')
-        self.client.login(username='admin', password='admin123456')
-
-        response = self.client.put(f'/api/projects/{project.id}/', {
-            'project_name': 'сайт YouTube',
-            'link_git': 'git/YouTube.com',
-            'descriptions': 'YouTube Api user',
-            'users': project.users.id
-        })
+        self.client.login(username='admin', password='admin12345')
+        response = self.client.patch(f'/api/projects/{self.project.id}/',
+                                     json.dumps({'project_name': 'ForMe'}), content_type='application/json')
+        project = ProjectModel.objects.get(id=self.project.id)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-
-    def test_edit_project_for_admin_mixer(self):
-
-        """AttributeError: 'ManyRelatedManager' object has no attribute 'id'"""
-
-        project = mixer.blend(ProjectModel)
-        admin = User.objects.create_superuser('admin', 'admin@admin.com', 'admin123456')
-        self.client.login(username='admin', password='admin123456')
-        print('---------8888888--------', project.users.id)
-        response = self.client.put(f'/api/projects/{project.id}/', {
-            'project_name': 'сайт YouTube',
-            'link_git': 'git/YouTube.com',
-            'descriptions': 'YouTube Api user',
-            'users': project.users.id
-        })
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(project.project_name, 'ForMe')

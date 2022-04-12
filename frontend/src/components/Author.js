@@ -21,7 +21,7 @@ const AuthorItem = ({author}) => {
 }
 
 
-const AuthorList = ({authors}) => {
+const AuthorList = ({users}) => {
     return(
         <table className='table'>
             <tbody>
@@ -40,7 +40,7 @@ const AuthorList = ({authors}) => {
                     </th>
                 </tr>
 
-                {authors.map((author) => <AuthorItem author={author}/>)}
+                {users.map((author) => <AuthorItem author={author}/>)}
 
             </tbody>
         </table>
