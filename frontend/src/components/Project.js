@@ -2,7 +2,8 @@ import React from 'react'
 import {NavLink} from 'react-router-dom'
 
 
-const ProjectItem = ({project}) => {
+const ProjectItem = ({project, deleteProject}) => {
+
 	return (
 		<tr>
 			<td>
@@ -10,7 +11,6 @@ const ProjectItem = ({project}) => {
 			</td>
 			<td>
 				{project.users.map((user) => user + ', ')}
-
 			</td>
 			<td>
 				{project.link_git}
@@ -21,37 +21,59 @@ const ProjectItem = ({project}) => {
 			<td>
 				{project.date_create}
 			</td>
+			<td>
+                <button onClick={() => deleteProject(project.id)}> delete </button>
+            </td>
 		</tr>
 		)
 }
 
 
-const ProjectsList = ({projects}) => {
+const ProjectsList = ({projects, findText, text, deleteProject}) => {
+
     return(
-        <table className='Table'>
-            <tbody>
-                <tr>
-                    <th>
-                            название проэкта
-                    </th>
-                    <th>
-                        персонал
-                    </th>
-                    <th>
-                        ссылка в git
-                    </th>
-                    <th>
-                        описание
-                    </th>
-                    <th>
-                        дата создания
-                    </th>
-                </tr>
+         <div>
 
-                {projects.map((project) => <ProjectItem project={project}/>)}
+            <form>
+                <label>
+                        Поиск
+                        <input type='text'
+                               name="text"
+                               value={text}
+                               onChange={(event) => findText(event.target.value)}/>
+                </label>
+            </form>
+            <table className='table'>
+                <tbody>
+                    <tr>
+                        <th>
+                                название проэкта
+                        </th>
+                        <th>
+                            персонал
+                        </th>
+                        <th>
+                            ссылка в git
+                        </th>
+                        <th>
+                            описание
+                        </th>
+                        <th>
+                            дата создания
+                        </th>
+                        <th>
 
-            </tbody>
-        </table>
+                        </th>
+                    </tr>
+
+                    {projects.map((project) => <ProjectItem
+                                                    key={project.id}
+                                                    project={project}
+                                                    deleteProject={deleteProject}/>)}
+                </tbody>
+            </table>
+            <NavLink to="projects/create">Создать Project</NavLink>
+         </div>
 	)
 }
 

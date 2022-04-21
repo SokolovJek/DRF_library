@@ -2,62 +2,69 @@ import React from 'react'
 import {useParams} from 'react-router-dom'
 
 
-const ProjectTodo = ({project}) => {
+const ProjectTodo = ({todo}) => {
 	return (
 		<tr>
 		    <td>
-				{project.project_name}
+				{todo.id}
 			</td>
 			<td>
-				{project.descriptions}
+				{todo.project}
 			</td>
 			<td>
-				{project.users.map((user) => user + ', ')}
+				{todo.users}
 			</td>
 			<td>
-				{project.link_git}
+				{todo.todo_descriptions}
 			</td>
 			<td>
-				{project.date_create}
+				{todo.date_create}
 			</td>
 			<td>
-				{project.set_todo.map((project) => project + '; ')}
+				{todo.date_update}
+			</td>
+			<td>
+				{todo.is_active}
 			</td>
 		</tr>
 		)
 }
 
 
-const ProjectsTodo = ({projects}) => {
+const ProjectsTodo = ({projects, todos}) => {
+// функция для вывода всех todo данного проэкта
+
     let {id} = useParams()         // можно так
 //    let my_id = useParams().id    // но так наглядней
     let filter_project = projects.filter((project) => project.id == id)
+    let filter_todos = todos.filter((todo) => todo.project == filter_project[0].project_name)
     return(
         <table className='Table'>
             <tbody>
                 <tr>
                     <th>
-                            название проэкта
+                        id
                     </th>
                     <th>
-                        описание
+                        проэкт
                     </th>
                     <th>
-                    персонал
-
+                        автор todo
                     </th>
                     <th>
-                        ссылка в git
+                        описание todo
                     </th>
                     <th>
                         дата создания
                     </th>
                     <th>
-                        список ToDo
+                        дата обнавления
+                    </th>
+                    <th>
+                        статус
                     </th>
                 </tr>
-
-                {filter_project.map((project) => <ProjectTodo project={project}/>)}
+                {filter_todos.map((todo) => <ProjectTodo todo={todo}/>)}
 
             </tbody>
         </table>

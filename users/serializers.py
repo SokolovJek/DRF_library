@@ -11,7 +11,7 @@ from .models import Users
 class AuthorsModelSerializers(ModelSerializer):
     class Meta:
         model = Users
-        fields = ('first_name', 'last_name', 'birthday_year', 'email', 'position')
+        fields = ('id', 'first_name', 'last_name', 'birthday_year', 'email', 'position')
         # exclude = ('uid',)
 
 
