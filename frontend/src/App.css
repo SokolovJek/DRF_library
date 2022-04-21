@@ -3,7 +3,7 @@
   --color2:#52339a;
 }
 
-.herader, .footer, .section{
+.header, .footer, .section{
   padding: 100px 0;
 }
 .header, .footer{
@@ -12,21 +12,6 @@
   background: -webkit-linear-gradient(left, var(--color1) 0%,var(--color2) 100%);
   background: linear-gradient(to right, var(--color1) 0%,var(--color2) 100%);
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=var(--color1), endColorstr=var(--color2),GradientType=1 );
-}
-
-.itd_play{
-  background-color: var(--color1);
-  border-radius: 10%;
-  
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-  margin: 30px auto;
-  transition: all 0.2s ease;
-}
-.itd_play:hover{
-  background-color: var(--color2);
 }
 
 
@@ -41,3 +26,10 @@ th {
 td {
    border: 2px solid grey;
 }
+
+/* кнопка */
+
+buttt {
+    border: aliceblue;
+}
+

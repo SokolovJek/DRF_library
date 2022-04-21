@@ -11,10 +11,15 @@ class ProjectModel(models.Model):
     date_create = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f'проэкт - {self.project_name}'
+        return f'{self.project_name}'
 
 
 class TodoModel(models.Model):
+    STATUS_CHOICES = (
+        ('ACTIVE', 'active'),
+        ('DONE', 'done'),
+    )
+
     project = models.ForeignKey(ProjectModel, on_delete=models.CASCADE)
     todo_descriptions = models.TextField()
     users = models.ForeignKey(Users,
@@ -23,7 +28,7 @@ class TodoModel(models.Model):
                               # blank=True,
                               # null=True
                               )
-    is_active = models.BooleanField(default=True)
+    is_active = models.CharField(max_length=20, choices=STATUS_CHOICES, default='active')
     date_create = models.DateTimeField(auto_now_add=True)
     date_update = models.DateTimeField(auto_now=True)
 
