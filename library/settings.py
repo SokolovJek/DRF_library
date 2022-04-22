@@ -21,10 +21,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '(^gqh3$i0%)=(g2+02m!cyzew)tcmk9yttlkq%#itvkc@6m*_8'
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
@@ -60,7 +59,10 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',  # for REACT CORS
 ]
 
-CORS_ALLOWED_ORIGINS = ["http://127.0.0.1:3000", 'http://localhost:3000']  # for REACT CORS
+# CORS_ALLOWED_ORIGINS = [                      # for REACT CORS
+#     "http://127.0.0.1:3000",
+#     'http://localhost:3000'
+# ]
 
 ROOT_URLCONF = 'library.urls'
 
@@ -87,8 +89,12 @@ WSGI_APPLICATION = 'library.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'library',
+        'USER': 'dante',
+        'PASSWORD': 'dante123456',
+        'HOST': 'db',
+        'PORT': '5432',
     }
 }
 
@@ -138,7 +144,7 @@ AUTH_USER_MODEL = 'users.Users'
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES':
-    ['rest_framework.permissions.IsAuthenticatedOrReadOnly'],
+        ['rest_framework.permissions.IsAuthenticatedOrReadOnly'],
     #     ['rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'],
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.BasicAuthentication',
